@@ -16,12 +16,16 @@ lbs for $41.49. People A and B allocate budgets of $15 and $20 respectively, at
 a maximum unit price of $12/lbs. The most efficient purchase is 3 units of 1
 lbs of cinnamon, distributed as follows:
 
+(python3 bulkfoods/examples/ab_no_c.py)
+
 > a p=15.00 q=1.31 u=11.49
 > b p=19.47 q=1.69 u=11.49
 
 But what if C also wants to buy cinnamon, and allocates $10 at a maximum unit
 price of $7.5/lbs? The new optimal solution is to buy a 5 lbs unit of cinnamon,
 distributed as follows:
+
+(python3 bulkfoods/examples/abc.py)
 
 > a p=15.00 q=1.77 u=8.49
 > b p=20.00 q=2.36 u=8.49

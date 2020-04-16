@@ -10,6 +10,18 @@ PersonalResult = namedtuple('PersonalResult', ['label', 'p', 'q', 'u'])
 BundleResult = namedtuple('BundleResult', ['label', 'n', 'ptotal', 'qtotal'])
 
 
+def print_bulkfoods(bundles, orders):
+    bundle_results, personal_results = bulkfoods(bundles, orders)
+    print("Bundles")
+    for br in bundle_results:
+        print("\t{}\tn={}\tptotal={:.2f}\tqtotal={:.2f}".format(br.label, br.n, float(br.ptotal), float(br.qtotal)))
+    print()
+
+    print("Personal Results")
+    for pr in personal_results:
+        print("\t{}\tp={:5.2f}\tq={:.2f}\tu={:.2f}".format(pr.label, float(pr.p), float(pr.q), float(pr.u)))
+
+
 def bulkfoods(bundles, orders):
     # recursively try all affordable bundles
     bundle_counts, order_groups = _try_all_bundles(bundles, orders)
@@ -117,26 +129,3 @@ def _bulkfoods(p_total, q_total, orders):
 
     # Done!
     return groups
-
-
-orders = [
-    Order('a', Fraction('15'), Fraction('12')),
-    Order('b', Fraction('20'), Fraction('12')),
-    Order('c', Fraction('10'), Fraction('7.5')),
-]
-
-bundles = [
-    Bundle('1lbs', Fraction('11.49'), Fraction('1')),
-    Bundle('5lbs', Fraction('41.59'), Fraction('5')),
-    Bundle('25lbs', Fraction('184.95'), Fraction('25')),
-]
-
-bundle_results, personal_results = bulkfoods(bundles, orders)
-print("Bundles")
-for br in bundle_results:
-    print("\t{}\tn={}\tptotal={}\tqtotal={}".format(br.label, br.n, round(float(br.ptotal), 2), round(float(br.qtotal), 2)))
-print()
-
-print("Personal Results")
-for pr in personal_results:
-    print("\t{}\tp={}\tq={}\tu={}".format(pr.label, round(float(pr.p),2), round(float(pr.q), 2), round(float(pr.u),2)))
