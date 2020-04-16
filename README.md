@@ -5,10 +5,10 @@ similar). Bulkfoods offers food in different bundle sizes (say 1lbs, 5lbs,
 25lbs), where larger quantities come at cheaper unit cost. We want cheap food,
 but don't want to store a huge supply of it.
 
-bulkfoods.py takes as input people's requests (in the form of "I'll spend up to
-<pmax> USD at any unit price up to <umax> USD/lbs") and the available bundles
-and computes the purchase that minimizes the maximum unit price paid by any
-individual. It then outputs the order that should be placed, the quantity that
+This library takes as input people's requests (in the form of "I'll spend up to
+<pmax> USD at any unit price up to <umax> USD/lbs") and the available bundles,
+and it computes the purchase that __minimizes the maximum unit price paid by 
+any individual__. It outputs the order that should be placed, the quantity that 
 each person should receive, and the amount they should pay for it.
 
 For example, suppose cinnamon is available in bundles of 1 lbs for $11.49 or 5
