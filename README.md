@@ -18,8 +18,8 @@ lbs of cinnamon, distributed as follows:
 
 (python3 bulkfoods/examples/ab_no_c.py)
 
-> a p=15.00 q=1.31 u=11.49
-> b p=19.47 q=1.69 u=11.49
+    a p=15.00 q=1.31 u=11.49
+    b p=19.47 q=1.69 u=11.49
 
 But what if C also wants to buy cinnamon, and allocates $10 at a maximum unit
 price of $7.5/lbs? The new optimal solution is to buy a 5 lbs unit of cinnamon,
@@ -27,9 +27,9 @@ distributed as follows:
 
 (python3 bulkfoods/examples/abc.py)
 
-> a p=15.00 q=1.77 u=8.49
-> b p=20.00 q=2.36 u=8.49
-> c p= 6.59 q=0.88 u=7.5
+    a p=15.00 q=1.77 u=8.49
+    b p=20.00 q=2.36 u=8.49
+    c p= 6.59 q=0.88 u=7.5
 
 Note that C is paying less than A and B per unit pound (notably at C's maximum
 unit price per pound). Additionally, Even more surprising, C's unit price is
