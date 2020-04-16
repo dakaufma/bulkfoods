@@ -1,12 +1,12 @@
 Name: 
 Address, including apartment number: 
-Phone number or wifi ssid/password or a promise that your door bell exists really works: 
+Phone number or wifi ssid/password or a promise that your door bell exists and really works: 
 When will you be home and awake on the weekend of 4/25 to receive and pay for food?: 
 Comments: 
 
 ----
 
-Product URL: (i.e. http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html)
+Product URL: (e.g. http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html)
 Allow substituting similar products: ("Yes". Alternatively "No")
 Budget + max unit cost: $___ at up to $___/pound
 Comments: 
@@ -16,7 +16,7 @@ Allow substituting similar products: Yes
 Budget + max unit cost: $___ at up to $___/pound
 Comments: 
 
-Product URL: (i.e. http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html)
+Product URL: (e.g. http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html)
 Allow substituting similar products: Yes
 Budget + max unit cost: $___ at up to $___/pound
 Comments: 

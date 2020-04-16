@@ -13,13 +13,17 @@ BundleResult = namedtuple('BundleResult', ['label', 'n', 'ptotal', 'qtotal'])
 def print_bulkfoods(bundles, orders):
     bundle_results, personal_results = bulkfoods(bundles, orders)
     print("Bundles")
+    max_label_len = max([len(br.label) for br in bundle_results if br.n > 0])
+    fmt = "  {:1d} unit of the {:%ds} bundle, for a total price of ${:5.2f} and a total quantity of {:5.2f}" % max_label_len
     for br in bundle_results:
-        print("\t{}\tn={}\tptotal={:.2f}\tqtotal={:.2f}".format(br.label, br.n, float(br.ptotal), float(br.qtotal)))
+        print(fmt.format(br.n, br.label, float(br.ptotal), float(br.qtotal)))
     print()
 
     print("Personal Results")
+    max_label_len = max([len(pr.label) for pr in personal_results])
+    fmt = "  {:%ds} pays ${:5.2f} for {:.2f} lbs (at unit price ${:.2f}/lbs)" % max_label_len
     for pr in personal_results:
-        print("\t{}\tp={:5.2f}\tq={:.2f}\tu={:.2f}".format(pr.label, float(pr.p), float(pr.q), float(pr.u)))
+        print(fmt.format(pr.label, float(pr.p), float(pr.q), float(pr.u)))
 
 
 def bulkfoods(bundles, orders):

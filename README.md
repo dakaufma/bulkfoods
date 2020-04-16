@@ -17,28 +17,27 @@ lbs for $41.49. People A and B allocate budgets of $15 and $20 respectively, at
 a maximum unit price of $12/lbs. The most efficient purchase is 3 units of 1
 lbs of cinnamon, distributed as follows:
 
-(python3 bulkfoods/examples/ab_no_c.py)
+(`python3 bulkfoods/examples/ab_no_c.py`)
 
-    a p=15.00 q=1.31 u=11.49
-    b p=19.47 q=1.69 u=11.49
+    A pays $15.00 for 1.31 lbs (at unit price $11.49/lbs)
+    B pays $19.47 for 1.69 lbs (at unit price $11.49/lbs)
 
 But what if C also wants to buy cinnamon, and allocates $10 at a maximum unit
 price of $7.5/lbs? The new optimal solution is to buy a 5 lbs unit of cinnamon,
 distributed as follows:
 
-(python3 bulkfoods/examples/abc.py)
+(`python3 bulkfoods/examples/abc.py`)
 
-    a p=15.00 q=1.77 u=8.49
-    b p=20.00 q=2.36 u=8.49
-    c p= 6.59 q=0.88 u=7.5
+    A pays $15.00 for 1.77 lbs (at unit price $8.49/lbs)
+    B pays $20.00 for 2.36 lbs (at unit price $8.49/lbs)
+    C pays $ 6.59 for 0.88 lbs (at unit price $7.50/lbs)
 
 Note that C is paying less than A and B per unit pound (because C has a low 
 maximum unit price), but is still included in the order. Even more surprising, 
 C's unit price is actually _less_ than unit price for the 5 lbs purchase! Why 
-is C still included in the order? Because despite this unfairness, A and B get 
-to pay a lower unit price with C participating in the order than without C.
-Everyone wins!
+is C still included in the order? Because despite this inequity, A and B get to 
+pay a lower unit price with C participating in the order than they would 
+without C. Everyone wins!
 
 __Tl;dr:__ optimizing this sort of thing can be counter-intuitive, but that's 
-what
-algorithms are for. Buy cheap bulk foods with your friends!
+what algorithms are for. Buy cheap bulk foods with your friends!
