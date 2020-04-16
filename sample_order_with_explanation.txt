@@ -1,0 +1,30 @@
+# Example order for cinnamon, budgeting $12, with unit price limited to roughly (erring on the big side) the bulkfoods.com 5-pound unit price
+
+Product URL: http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html
+Allow substituting similar products: No, I have very strong preferences about my cinnamon and don't want you to buy another type for me to make bulk orders work better.
+Budget + max unit cost: $12.00 at up to $8.50/pound
+Comments: Thanks for organizing this; you're the best!
+
+(If no one else orders cinnamon then you'll spend $0 and get 0 pounds, because the unit price at 1 pound is more than $8.50/pound and you didn't budget enough money for 5 pounds.)
+
+
+# Alternative example order for cinnamon that would result in buying 1 pound even if no one else wants cinnamon (but equivalent to the above if we buy 5+ pounds)
+
+Product URL: http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html
+Allow substituting similar products: Yes, cinnamon is cinnamon. Please do what you need to do to make my food as cheap as possible.
+Budget + max unit cost: $12.00 at up to $11.50/pound
+Comments: Mmm, delicious!
+
+(If 4 people submit this order then it is most efficient to buy 5 pounds of cinnamon, and each person will end up receiving 1.25 pounds of cinnamon and pay $10.40 ($8.32/pound) for it.)
+
+
+# Complicated cinnamon order: tiered budgets. If you're that fucker who thinks that simple, comprehensible orders don't adequately express your utility function then knock yourself out with this business
+
+Product URL: http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html
+Allow substituting similar products: Yes.
+Budget + max unit cost: $12.00 at up to $11.50/pound
+Budget + max unit cost: $ 8.00 at up to $ 8.50/pound
+Comments: I love economics. Also I spent a ton of time contemplating the relative impacts of cinnamon and USD on my utility function, and that use of time was definitely not utility-maximizing. Oops. Thanks anyway for accommodating my complicated request.
+
+(This represents 2 completely independed orders for cinnamon. In total you will spend at most $20. $12 of that budget is limited to purchases at <=$11.50/pound, and the remaining is only spent at <=$8.50/pound. It is possible that these two orders will be filled at different unit prices because of ... reasons (minimizing the maximum unit price that anyone pays is surprisingly complicated, see README on github for details))
+
