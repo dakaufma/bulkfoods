@@ -102,6 +102,7 @@ def _bulkfoods(p_total, q_total, orders):
             groups[-1] = merge_groups(groups[-1], g)
         else:
             groups.append(g)
+    orig_groups = groups[:]
 
     # Perform first sweep, to determine which groups are in on the purchase
     p_purchase = 0
@@ -126,6 +127,16 @@ def _bulkfoods(p_total, q_total, orders):
         q_remaining -= groups[i].p / u_group
         if q_remaining < -1e-2:
             return None
+
+    # The current answer in groups has the minimum max unit price, but there may be more answers
+    # with the same max unit price and more people participating in the purchase. These are preferable
+    u_best = groups[-1].u
+    for i in range(min_group):
+        if orig_groups[i].u >= u_best:
+            # alternative solution with more participants: orig_groups[i:] at unit price u_best
+            labels = reduce(lambda a, b: a + b, [g.labels for g in orig_groups[i:]], [])
+            groups = [OrderGroup(labels, p_total, u_best)]
+            break
 
     # Done!
     return groups
