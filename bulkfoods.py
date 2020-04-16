@@ -1,5 +1,6 @@
 from collections import namedtuple
 from functools import reduce
+from fractions import Fraction
 
 Order = namedtuple('Order', ['label', 'pmax', 'umax']);
 OrderGroup = namedtuple('OrderGroup', ['labels', 'p', 'u'])
@@ -71,10 +72,8 @@ def _try_all_larger_bundles(bundles, orders, bundle_counts, pmax):
 
 
 # helper function used when a set of bundles has been selected, determining p_total and q_total
+# produces the allocation of P and Q to (groups of) people
 def _bulkfoods(p_total, q_total, orders):
-    # print('_bulkfoods {:.2f} {}'.format(p_total, q_total))
-    DEBUG=False
-
     if q_total <= 0:
         return None
 
@@ -90,91 +89,54 @@ def _bulkfoods(p_total, q_total, orders):
             groups[-1] = merge_groups(groups[-1], g)
         else:
             groups.append(g)
-    if (DEBUG): print("initial: ", groups)
 
-    while True:
-        # distribute excess quantity, if any
-        extra_q = q_total - sum([g.p / g.u for g in groups])
-        while extra_q > 0:
-            g_last = groups[-1]
-            q_last = g_last.p / g_last.u
-            if len(groups) == 1:
-                new_q_last = q_last + extra_q
-                groups[-1] = g_last._replace(u=g_last.p / new_q_last)
-                extra_q = 0
-                if (DEBUG): print("q redistribute, add to only", groups)
-            else:
-                q_to_next_group = g_last.p / groups[-2].u - q_last
-                if q_to_next_group <= extra_q:
-                    extra_q -= q_to_next_group
-                    new_q_last = q_to_next_group + q_last
-                    groups[-1] = g_last._replace(u=g_last.p / new_q_last)
-                    groups[-2] = merge_groups(groups[-2], groups[-1])
-                    groups = groups[:-1]
-                    if (DEBUG): print("q redistribute, merge", groups)
-                else:
-                    new_q_last = q_last + extra_q
-                    groups[-1] = g_last._replace(u=g_last.p / new_q_last)
-                    extra_q = 0
-                    if (DEBUG): print("q redistribute, add to last", groups)
+    # Perform first sweep, to determine which groups are in on the purchase
+    p_purchase = 0
+    min_group = len(groups)
+    for i in range(len(groups) -1, -1, -1):
+        if p_purchase < p_total:
+            min_group = i
+        group_p = min(groups[i].p, p_total - p_purchase)
+        groups[i] = groups[i]._replace(p=group_p)
+        p_purchase += group_p
+    if p_purchase < p_total:
+        return None
+    groups = groups[min_group:]
 
-        # If there is excess payment...
-        extra_p = sum([g.p for g in groups]) - p_total
-        if extra_p > 1e-2:
-            if p_total / q_total <= groups[0].u:
-                labels = reduce(lambda a, b: a + b, [g.labels for g in groups], [])
-                return [OrderGroup(labels, p_total, p_total/q_total)]
-            elif len(groups) == 1:
-                # This probably can't happen because of other checks in place, but just in case:
-                # If there is only one group and the condition above doesn't trigger then no purchase can be made
-                return None
-            else:
-                # If multiple groups then scale down p,q allocated to the lowest u group (holding u constant)
-                # Reduce the price by min(extra_p, g.p, u * amount of price for amount of q to merge groups again)
-                g_last = groups[-1]
-                q_last = g_last.p / g_last.u
-                q_to_next_merge = g_last.p / groups[-2].u - q_last
-                p_to_next_merge = groups[0].u * q_to_next_merge
-                dp = min(extra_p, groups[0].p, p_to_next_merge)
-                extra_p -= dp
-                groups[0] = groups[0]._replace(p=groups[0].p - dp)
-                if dp >= groups[0].p:
-                    groups = groups[1:]
-                    if (DEBUG): print("p redistribute, destroy min u", groups)
-                elif dp >= p_to_next_merge:
-                    groups[-1] = g_last._replace(u=groups[-1].u)
-                    groups[-2] = merge_groups(groups[-2], groups[-1])
-                    groups = groups[:-1]
-                    if (DEBUG): print("p redistribute, merge biggest groups", groups)
-                else:
-                    if (DEBUG): print("p redistribute, no structural change", groups)
-        else:
-            # no extra p --> if lacking p then return fail; if not then return groups
-            if extra_p < -1e-2:
-                return None
-            else:
-                return groups
+    # Perform second sweep, to determine the unit price paid by each group
+    q_remaining = q_total
+    p_remaining = p_total
+    for i in range(len(groups)):
+        u_group = min(p_remaining / q_remaining, groups[i].u)
+        groups[i] = groups[i]._replace(u=u_group)
+        p_remaining -= groups[i].p
+        q_remaining -= groups[i].p / u_group
+        if q_remaining < -1e-2:
+            return None
+
+    # Done!
+    return groups
+
 
 orders = [
-    Order('a', 15, 10),
-    Order('b', 20, 10),
-    Order('mini_a', 10, 7.4),
+    Order('a', Fraction('15'), Fraction('10')),
+    Order('b', Fraction('20'), Fraction('10')),
+    Order('mini_a', Fraction('10'), Fraction('7.4')),
 #    Order('mini_b', 10, 9),
 ]
 
 bundles = [
-    Bundle('1lbs', 11.49, 1),
-    Bundle('5lbs', 41.59, 5),
-    Bundle('25lbs', 184.95, 25),
+    Bundle('1lbs', Fraction('11.49'), Fraction('1')),
+    Bundle('5lbs', Fraction('41.59'), Fraction('5')),
+    Bundle('25lbs', Fraction('184.95'), Fraction('25')),
 ]
 
 bundle_results, personal_results = bulkfoods(bundles, orders)
 print("Bundles")
 for br in bundle_results:
-    print("\t{}".format(br))
+    print("\t{}\tn={}\tptotal={}\tqtotal={}".format(br.label, br.n, round(float(br.ptotal), 2), round(float(br.qtotal), 2)))
 print()
 
 print("Personal Results")
 for pr in personal_results:
-    print("\t{}".format(pr))
-
+    print("\t{}\tp={}\tq={}\tu={}".format(pr.label, round(float(pr.p),2), round(float(pr.q), 2), round(float(pr.u),2)))
