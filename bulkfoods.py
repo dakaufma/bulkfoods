@@ -1,6 +1,7 @@
 from collections import namedtuple
 from functools import reduce
 from fractions import Fraction
+from math import floor
 
 Order = namedtuple('Order', ['label', 'pmax', 'umax']);
 OrderGroup = namedtuple('OrderGroup', ['labels', 'p', 'u'])
@@ -11,8 +12,7 @@ BundleResult = namedtuple('BundleResult', ['label', 'n', 'ptotal', 'qtotal'])
 
 def bulkfoods(bundles, orders):
     # recursively try all affordable bundles
-    pmax = sum([o.pmax for o in orders])
-    bundle_counts, order_groups, _ = _try_all_larger_bundles(bundles, orders, [0 for _ in bundles], pmax)
+    bundle_counts, order_groups = _try_all_bundles(bundles, orders)
 
     label_to_order = {}
     for o in orders:
@@ -41,34 +41,33 @@ def bulkfoods(bundles, orders):
     return bundle_results, personal_results
 
 
-def _try_all_larger_bundles(bundles, orders, bundle_counts, pmax):
-    # test the current bundle counts
-    cost = sum([b.p * c for (b, c) in zip(bundles, bundle_counts)])
-    if cost > pmax:
-        return None, None, 0
-    best_quantity = sum([b.q * c for (b, c) in zip(bundles, bundle_counts)])
-    best_groups = _bulkfoods(cost, best_quantity, orders)
-    best_counts = None if best_groups is None else bundle_counts
+def _try_all_bundles(bundles, orders):
+    # No two bundles have the same efficiency, and if we bought 2 bundles of different efficiency
+    # then we'd be better off not buying the less efficient one, scaling down price accordingly,
+    # and distributing extra quantity to lower unit price. Thus we will only buy one type of bundle
+    best_bundle = None
+    best_count = None
+    best_quantity = 0
+    best_groups = None
 
-    # test each count 1 larger, recursively
-    # to avoid duplicate tests in subtrees, only increment indices starting with the last non-zero
-    first_index = len(bundle_counts) - 1
-    while first_index > 0 and bundle_counts[first_index] == 0:
-        first_index -= 1
-    for i in range(first_index, len(bundle_counts)):
-        new_counts = bundle_counts[:]
-        new_counts[i] += 1
-        new_counts, new_groups, new_quantity = _try_all_larger_bundles(bundles, orders, new_counts, pmax)
-        if new_groups and (
-            best_groups is None or 
-            best_groups[-1].u > new_groups[-1].u or 
-            (best_groups[-1].u == new_groups[-1].u and new_quantity > best_quantity)
-        ):
-            best_groups = new_groups
-            best_counts = new_counts
-            best_quantity = new_quantity
+    pmax = sum([o.pmax for o in orders])
+    for i in range(len(bundles)):
+        for count in range(1, floor(pmax / bundles[i].p) + 1):
+            p_total = count * bundles[i].p
+            q_total = count * bundles[i].q
+            groups = _bulkfoods(p_total, q_total, orders)
+            if groups:
+                if (best_groups == None
+                    or best_groups[-1].u > groups[-1].u
+                    or (best_groups[-1].u == groups[-1].u and q_total > best_quantity)
+                ):
+                    best_bundle = i
+                    best_count = count
+                    best_quantity = q_total
+                    best_groups = groups
 
-    return best_counts, best_groups, best_quantity
+    counts = [(best_count if i == best_bundle else 0) for i in range(len(bundles))]
+    return counts, best_groups
 
 
 # helper function used when a set of bundles has been selected, determining p_total and q_total
@@ -121,8 +120,7 @@ def _bulkfoods(p_total, q_total, orders):
 orders = [
     Order('a', Fraction('15'), Fraction('10')),
     Order('b', Fraction('20'), Fraction('10')),
-    Order('mini_a', Fraction('10'), Fraction('7.4')),
-#    Order('mini_b', 10, 9),
+    Order('c', Fraction('10'), Fraction('7.4')),
 ]
 
 bundles = [
