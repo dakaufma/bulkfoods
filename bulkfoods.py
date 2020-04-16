@@ -13,6 +13,8 @@ BundleResult = namedtuple('BundleResult', ['label', 'n', 'ptotal', 'qtotal'])
 def bulkfoods(bundles, orders):
     # recursively try all affordable bundles
     bundle_counts, order_groups = _try_all_bundles(bundles, orders)
+    if order_groups is None:
+        return None, None
 
     label_to_order = {}
     for o in orders:
@@ -118,9 +120,9 @@ def _bulkfoods(p_total, q_total, orders):
 
 
 orders = [
-    Order('a', Fraction('15'), Fraction('10')),
-    Order('b', Fraction('20'), Fraction('10')),
-    Order('c', Fraction('10'), Fraction('7.4')),
+    Order('a', Fraction('15'), Fraction('12')),
+    Order('b', Fraction('20'), Fraction('12')),
+    Order('c', Fraction('10'), Fraction('7.5')),
 ]
 
 bundles = [
