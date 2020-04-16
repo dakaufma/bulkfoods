@@ -2,8 +2,9 @@
 
 Scenario: a group of people want to order cheap food (from bulkfoods.com, or
 similar). Bulkfoods offers food in different bundle sizes (say 1lbs, 5lbs,
-25lbs), where larger quantities come at cheaper unit cost. We want cheap food,
-but don't want to store a huge supply of it.
+25lbs), where larger quantities come at a cheaper unit cost. We want to buy 
+cheap food, but don't want to store a huge supply of it. How much should we 
+buy?
 
 This library takes as input people's requests (in the form of "I'll spend up to
 <pmax> USD at any unit price up to <umax> USD/lbs") and the available bundles,
