@@ -1,8 +1,7 @@
 # All quantities in oz, all prices in USD. Quantities are restricted to being integer multiples of 1 oz to make this a linear program.
 
-# Details aside, this program maximizes the quantity purchased, and secondarily
-# minimizes the highest unit price anyone pays, while respecting everyone's
-# budget and unit price constraints.
+# Details aside, this program minimizes the maximum cost per unit that anyone
+# pays while respecting everyone's budget and unit price constraints.
 
 set bundles;
 set people;
@@ -48,8 +47,8 @@ var U_max_person, >= 0;
 
 
 ###############################################################################
-# Maximize quantity purchased; secondarily minimize max unit price paid, then minimize the maximum quantity that a single person has
-maximize obj: sum{j in people} Q[j] - 1e-2 * U_max_person - 1e-5 * sum{j in people, k in oz_nums} Qoz[j,k] * k;
+# Minimize max unit price paid, secondarily maximize quantity at that price, then minimize the biggest quantity that a single person has (i.e. distribute it evenly)
+maximize obj: - U_max_person + 1e-4 * sum{j in people} Q[j] - 3e-7 * sum{j in people, k in oz_nums} Qoz[j,k] * k;
 
 
 ###############################################################################
@@ -72,6 +71,9 @@ s.t. purchase_price:    sum{j in people} P[j] = sum{i in bundles} N[i] * p[i];
 
 #   Max unit price paid by anyone >= unit price paid by any one person
 s.t. unit_max{j in people, k in oz_nums}: U_max_person >= Poz[j,k];
+
+#   Ensure that something is bought, or the maximum unit price paid is not well defined. If the correct solution is actually to not buy anything then the problem will be unsolvable
+s.t. something_is_purchased: sum{i in bundles} N[i] >= 1;
 
 
 

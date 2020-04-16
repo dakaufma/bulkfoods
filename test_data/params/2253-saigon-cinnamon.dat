@@ -1,7 +1,7 @@
 data;
 
 # Product URL: http://www.bulkfoods.com/cinnamon-spice/2253-saigon-cinnamon.html
-set people := "shiphouse" "ssdh" "andreali";
+set people := "shiphouse" "ssdh" "andreali" "tatyana";
 set bundles := "1lbs" "5lbs";
 
 param q
@@ -17,13 +17,15 @@ param p
 param b
 "shiphouse" 15
 "ssdh" 20
-"andreali" 1
+"andreali" 10
+"tatyana" 10
 ;
 
 param u
 "shiphouse" 1.52
 "ssdh" 1.52
-"andreali" .10
+"andreali" .30
+"tatyana" .40
 ;
 
 end;
