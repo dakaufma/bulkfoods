@@ -34,9 +34,9 @@ distributed as follows:
 
 Note that C is paying less than A and B per unit pound (because C has a low 
 maximum unit price), but is still included in the order. Even more surprising, 
-C's unit price is actually _less_ than price for the 5 lbs purchase! But C is 
-still included in the order ... why? Because despite this unfairness, A and B 
-pay a lower unit price with C participating in the order than without C.
+C's unit price is actually _less_ than unit price for the 5 lbs purchase! Why 
+is C still included in the order? Because despite this unfairness, A and B get 
+to pay a lower unit price with C participating in the order than without C.
 Everyone wins!
 
 __Tl;dr:__ optimizing this sort of thing can be counter-intuitive, but that's 
